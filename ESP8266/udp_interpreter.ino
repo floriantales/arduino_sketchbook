@@ -2,7 +2,7 @@
 #include <WiFiUdp.h>
  
 const char* ssid = "freebox";
-const char* password = "maison de clairon et tata";
+const char* password = "******";
  
 WiFiUDP Udp;
 unsigned int localUdpPort = 4210;  // local port to listen on
