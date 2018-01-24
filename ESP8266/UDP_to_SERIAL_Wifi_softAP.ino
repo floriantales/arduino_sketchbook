@@ -6,7 +6,7 @@ IPAddress local_IP(10,10,10,1);
 IPAddress gateway(10,10,10,0);
 IPAddress subnet(255,255,255,0);
 const char *ssid = "UDP_to_SERIAL";
-const char *password = "12345678"; // Must be 8 chars min (wpa2) see https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/soft-access-point-class.html#softap
+const char *password = "********"; // Must be 8 chars min (wpa2) see https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/soft-access-point-class.html#softap
 
 // UDP settings
 WiFiUDP Udp;
