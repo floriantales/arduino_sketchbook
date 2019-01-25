@@ -2,7 +2,7 @@
 
 const byte numChars = 32;
 char receivedChars[numChars]; // an array to store the received data
-char endMarker = '\r'; // Il s'agit de marqueur de fin pour minicom (quand on press Enter)
+char endMarker = '\r'; // Il s'agit du marqueur de fin pour minicom (quand on press Enter)
 
 boolean newData = false;
 
