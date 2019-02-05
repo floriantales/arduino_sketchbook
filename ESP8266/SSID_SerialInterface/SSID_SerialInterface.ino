@@ -1,4 +1,4 @@
-# Un exemple mieux foutu : https://github.com/floriantales/arduino_sketchbook/blob/master/ESP8266/SSID_SerialInterface/SSID_SerialInterface.ino
+# Un exemple mieux foutu (mais bloquant) : https://github.com/floriantales/arduino_sketchbook/blob/master/ESP8266/SSID_SerialInterface/SSID_SerialInterface.ino
 #include "ESP8266WiFi.h"
 
 const byte numChars = 32;
