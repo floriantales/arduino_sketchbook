@@ -6,8 +6,8 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
-const char* ssid = "freebox";
-const char* password = "maison de clairon et tata";
+const char* ssid = "*****";
+const char* password = "*****";
 
 #define WARP10_SERVER_IP "192.168.0.11"
 #define WARP10_SERVER_PORT 80
