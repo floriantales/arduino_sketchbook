@@ -1,5 +1,3 @@
-//https://esp8266-shop.com/blog/how-to-http-get-and-post-requests-with-esp8266/
-//https://diyprojects.io/esp8266-web-client-tcp-ip-communication-examples-esp8266wifi-esp866httpclient/#.X4siVnUzaV4
 //https://github.com/esp8266/Arduino/issues/1390
 //https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266HTTPClient/examples/PostHttpClient/PostHttpClient.ino
 
@@ -16,12 +14,14 @@ const char* password = "*****";
 #define WARP10_CLASS_NAME "GTS_demo"
 
 // Pour la demo
-unsigned long gts_timestamp = 1; // En secondes
-const char* gts_gps_lat = "48.44484"; // A voir pour passer en  double 64 bits
-const char* gts_gps_lon = "-4.46653"; // A voir pour passer en  double 64 bits
-long gts_gps_elev = 150;  // En metres
-const char* gts_labels = "lieu=maison";
-int  gts_value = 10;
+unsigned long gts_timestamp_s = 0; // seconds -> zero will let warp10 server fixe the timestamp for you
+String gts_timestamp_us = "";    // nothing to send to warp10
+String gts_gps_lat = "48.44484"; // A voir pour passer en  double 64 bits
+String gts_gps_lon = "-4.46653"; // A voir pour passer en  double 64 bits
+long gts_gps_elev_m = 150;  // meters
+String gts_labels = "lieu=maison";
+int  gts_value = 0;
+String gts_post_string = "";
 
 void setup()
 { 
@@ -42,6 +42,14 @@ void setup()
 
 void loop()
 {
+  // Ecrriture des donnees
+  if (gts_timestamp_s != 0) // GTS Timestamp
+  {
+    String gts_timestamp_us = String(gts_timestamp_s) + "000000";
+  }
+  gts_value = gts_value + 1;  //  GTS Value
+  gts_post_string = gts_timestamp_us + "/" + gts_gps_lat + ":" + gts_gps_lon + "/" + String(gts_gps_elev_m) + "000 " WARP10_CLASS_NAME "{" + gts_labels + "} " + String(gts_value); //  GTS Post String
+  
   // Test de connectivite
   Serial.print("Connectivity test : ");
   WiFiClient client; // Creation object client
@@ -55,25 +63,25 @@ void loop()
   client.stop();
 
   // Post HTTP
-  HTTPClient http;                                                                                  // Creation objet http
+  HTTPClient http;                                                                                  // Create http object
   Serial.println("POST GTS to warp10 : ");
-  Serial.println("    url = http://" WARP10_SERVER_IP ":" + String(WARP10_SERVER_PORT) + WARP10_UPDATE_URL);
+  Serial.println("    url     = http://" WARP10_SERVER_IP ":" + String(WARP10_SERVER_PORT) + WARP10_UPDATE_URL);
   http.begin("http://" WARP10_SERVER_IP ":" + String(WARP10_SERVER_PORT) + WARP10_UPDATE_URL);
+  Serial.println("    header  = X-Warp10-Token: " + String(WARP10_WRITE_TOKEN));
   http.addHeader("X-Warp10-Token", WARP10_WRITE_TOKEN);                                             // Add Warp10 Write Header Token
-  Serial.println(gts_gps_lat);
-  Serial.println("    data = " + String(gts_timestamp) + "000000/" + gts_gps_lat + ":" + gts_gps_lon + "/" + String(gts_gps_elev) + "000 " WARP10_CLASS_NAME "{" + gts_labels + "} " + String(gts_value));
-  int httpCode = http.POST(String(gts_timestamp) + "000000/" + gts_gps_lat + ":" + gts_gps_lon + "/" + String(gts_gps_elev) + "000 " WARP10_CLASS_NAME "{" + gts_labels + "} " + String(gts_value));     // On poste les GTS et on recupere le code http
+  Serial.println("    data    = " + gts_post_string);
+  int httpCode = http.POST(gts_post_string);                                                        // Post GTS and catch http code
   Serial.printf("Http_return_code = %d \n", httpCode);                                              // Print HTTP Code
-  if (httpCode > 0) {
-    Serial.println("Warp10 server reached.");
+  if (httpCode > 0) {                                                                               // if > 0 tcp layer ok
+    Serial.println("Data posted to Warp10.");
     if (httpCode != 200) {
       Serial.println("Http reply : ");
-      http.writeToStream(&Serial);                                                                  // On dump le message http si KO
+      http.writeToStream(&Serial);                                                                  // http dump if http code != 200
     }
   }
   else
   {
-    Serial.println("Failed to reach Warp10 server ... ");
+    Serial.println("Failed to reach Warp10 server.");
   }
   http.end(); // Close connection
 
