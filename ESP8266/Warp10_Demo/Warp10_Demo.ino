@@ -6,19 +6,20 @@
 
 // Wifi config
 #define WIFI_HOSTNAME "Warp10_Demo"
-const char* ssid = "******";
-const char* password = "******";
+const char* ssid = "*****";
+const char* password = "*****";
 
 // Warp10 config
 #define WARP10_SERVER_IP "192.168.0.11"
 #define WARP10_SERVER_PORT 80
 #define WARP10_UPDATE_URL "/api/v0/update"
 #define WARP10_WRITE_TOKEN "AP_8QdbvhyjFJuuOoohNyHJClJd7ODr.vP5GMt.Y6irthsyFdeaZt_vx2CeCrQfpF465ADT1RKD5e488pteN2MhfVomQbEHAPX8Ra3foeYo"
-#define WARP10_CLASS_NAME "GTS_demo"
+#define WARP10_CLASS_NAME "GTS_Titi"
 
 void setup()
 { 
   Serial.begin(115200);
+  delay(10);
   Serial.println();
 
   WiFi.hostname(WIFI_HOSTNAME);
@@ -37,13 +38,23 @@ void setup()
 void loop()
 {
   // ALIMENTATION GTS
-  unsigned long gts_timestamp_s = 0;  // epoch in seconds -> zero will let warp10 server fixe the timestamp for you
-  String gts_gps_lat = "48.44484";    // A voir pour passer en  double 64 bits // xx let warp10 server fixe no LAT/LON values
-  String gts_gps_lon = "-4.46653";    // A voir pour passer en  double 64 bits
-  int gts_gps_elev_m = -1;            // meters -> -1 will let warp10 server fixe no elevation value
-  String gts_labels = "id=wemos1";
-  float  gts_value = 0;
+  //unsigned long gts_timestamp_s = 0;  // epoch in seconds -> zero will let warp10 server fixe the timestamp for you
+  //String gts_gps_lat = "48.44484";    // A voir pour passer en  double 64 bits // xx let warp10 server fixe no LAT/LON values
+  //String gts_gps_lon = "-4.46653";    // A voir pour passer en  double 64 bits
+  //int gts_gps_elev_m = -1;            // meters -> -1 will let warp10 server fixe no elevation value
+  //String gts_labels = "id=wemos1";
+  //float gts_value = 0;
 
+  // POST to Warp10
+  Warp10_update(0, "xx", "-xx", -1, "id=wemos1", 0);
+  
+  // WAIT BEFORE RESTART LOOP (Deep Sleep si batterie)
+  Serial.println("Waiting ...");
+  delay(5000);
+}
+
+void Warp10_update(unsigned long gts_timestamp_s, String gts_gps_lat, String gts_gps_lon, int gts_gps_elev_m, String gts_labels, float gts_value)
+{
   // FORMATTAGE STRING POST
   String gts_post_string = "";
   // Timestamp
@@ -104,9 +115,4 @@ void loop()
     Serial.println("Failed to reach Warp10 server.");
   }
   http.end(); // Close connection
-
-
-  // WAIT BEFORE RESTART LOOP (Deep Sleep si batterie)
-  Serial.println("Waiting ...");
-  delay(5000);
 }
