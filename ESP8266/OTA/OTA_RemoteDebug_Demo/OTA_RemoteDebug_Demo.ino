@@ -7,11 +7,9 @@
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 
-// Uncomment to disable Remote Debug (port tcp telnet 23)
-//#define DEBUG_DISABLED
-// Uncomment to disable RemoteDebugApp WebSocket (port tcp http 8232)
-//#define WEBSOCKET_DISABLED true
-// Include Remote Debug
+// Remote Debug
+//#define DEBUG_DISABLED // Uncomment to disable Remote Debug (port tcp telnet 23)
+//#define WEBSOCKET_DISABLED true // Uncomment to disable RemoteDebugApp WebSocket (port tcp http 8232)
 #include "RemoteDebug.h"
 
 // Wifi config
