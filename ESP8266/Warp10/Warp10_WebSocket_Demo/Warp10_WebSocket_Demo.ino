@@ -12,7 +12,7 @@ WebSocketClient warp10(false);	// Set true for wss
 void setup() {
 	Serial.begin(115200);
 	Serial.println();
-	WiFi.begin("freebox", "maison de clairon et tata");
+	WiFi.begin(ssid, password);
 
   WiFi.hostname(WIFI_HOSTNAME);
   Serial.printf("Connecting to %s ", ssid);
